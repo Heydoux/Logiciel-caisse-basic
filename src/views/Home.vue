@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <img alt="Vue logo" src="../assets/images/slpv-logo.jpg" />
+    <HelloWorld msg="Sous les paves le vintage Caisse" />
   </div>
 </template>
 
@@ -16,3 +16,10 @@ export default {
   }
 };
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
+img {
+  max-height: 40vh;
+}
+</style>

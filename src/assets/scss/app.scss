@@ -1,0 +1,19 @@
+@import "~bootstrap/scss/bootstrap";
+@import "admin";
+//@import "sidebar-theme";
+
+$greenslpv: #26734f;
+$pinkslpv: #c3abcd;
+$white: #ffffff;
+
+.btn-slpv-primary {
+  color: $white;
+  background-color: $greenslpv;
+  border: $greenslpv;
+}
+
+.btn-slpv-primary:hover {
+  color: white;
+  background-color: $pinkslpv;
+  border: $pinkslpv;
+}
