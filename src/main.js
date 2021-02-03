@@ -6,7 +6,10 @@ import "popper.js";
 import "bootstrap";
 import "./assets/scss/app.scss";
 import excel from "vue-excel-export";
+import Swal from 'sweetalert2';
 
+// CommonJS
+window.Swal = Swal;
 window.$ = window.jQuery = jQuery;
 
 Vue.use(excel);

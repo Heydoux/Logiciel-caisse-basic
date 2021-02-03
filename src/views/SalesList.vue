@@ -352,8 +352,9 @@ export default {
     enddate.setHours(23);
     enddate.setMinutes(59);
     enddate.setSeconds(59);
+    this.transactions = [];
     db.collection("transactions")
-      .orderBy("date", "desc")
+      .orderBy("date")
       .startAt(startdate)
       .endAt(enddate)
       .get()

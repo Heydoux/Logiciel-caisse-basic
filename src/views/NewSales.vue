@@ -137,11 +137,27 @@ export default {
         .add(this.transaction)
         .then(docRef => {
           console.log("Document written with ID: ", docRef.id);
-          //this.reset();
+          this.reset();
+          Swal.fire({
+            title: "Youhou !",
+            text: "Transaction bien enregistrée, bien joué.",
+            icon: "success",
+            confirmButtonText: "Cool"
+          });
         })
         .catch(function(error) {
           console.error("Error adding document in database: ", error);
+          Swal.fire({
+            title: "Oups !",
+            text: "La transacion n'a pas pu s'enregistrer correctement, merci de réessayer",
+            icon: "error",
+            confirmButtonText: "Ok"
+          });
         });
+    },
+    reset() {
+      Object.assign(this.$data, this.$options.data.apply(this));
+      $(".btn-saler").removeClass("active");
     }
   }
 };
