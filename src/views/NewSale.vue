@@ -1,103 +1,36 @@
 <template>
   <div class="newsale">
-    <div class="row justify-content-center align-items-center h-75 w-100 p-0">
-      <div class="col-md-4">
-        <button
-          @click="addSaler('Flor')"
-          class="btn btn-slpv-primary text-uppercase"
-        >
-          Flor
-        </button>
+    <div class="calculator">
+      <div class="answer">{{ answer }}</div>
+      <div class="display">{{ logList + current }}</div>
+      <div @click="clear" id="clear" class="btn operator">C</div>
+      <div @click="addtoLog('/')" id="divide" class="btn operator">
+        /
       </div>
-      <div class="col-md-4">
-        <button
-          @click="addSaler('Emma')"
-          class="btn btn-slpv-primary text-uppercase"
-        >
-          Emma
-        </button>
-      </div>
-      <div class="col-md-4">
-        <button
-          @click="addSaler('Slpv')"
-          class="btn btn-slpv-primary text-uppercase"
-        >
-          Sous les pavés le vintage
-        </button>
-      </div>
-      <div class=" col-md-12 m-auto">
-        <div class="form-group d-flex">
-          <label
-            for="inputPrice"
-            class="text-uppercase w-25 font-weight-bold my-auto"
-          >
-            Prix de vente
-          </label>
-          <input
-            type="number"
-            class="form-control w-25"
-            id="inputPrice"
-            placeholder="Prix de vente"
-            v-model="transaction.prixAvCom"
-          />
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-check">
-          <input
-            type="radio"
-            name="pricemethod"
-            class="form-check-input"
-            id="chekbox_sumup"
-            value="carte"
-            v-model="transaction.modePaiement"
-          />
-          <label class="form-check-label" for="chekbox_sumup">CARTE</label>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-check">
-          <input
-            type="radio"
-            name="pricemethod"
-            class="form-check-input"
-            id="checkbox_cash"
-            value="cash"
-            v-model="transaction.modePaiement"
-          />
-          <label class="form-check-label" for="checkbox_cash">CASH</label>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-check">
-          <input
-            type="radio"
-            name="pricemethod"
-            class="form-check-input"
-            id="checkbox_vel"
-            value="vel"
-            v-model="transaction.modePaiement"
-          />
-          <label class="form-check-label" for="checkbox_vel">
-            VENTE EN LIGNE
-          </label>
-        </div>
-      </div>
-      <div class="offset-md-3 col-md-4 m-auto">
-        <button
-          @click="sendTransaction"
-          class="btn btn-slpv-primary text-uppercase"
-        >
-          Enregistrer la vente
-        </button>
-      </div>
+      <div @click="addtoLog('*')" id="times" class="btn operator">*</div>
+      <div @click="addtoLog('-')" id="minus" class="btn operator">-</div>
+      <div @click="append('7')" id="n7" class="btn">7</div>
+      <div @click="append('8')" id="n8" class="btn">8</div>
+      <div @click="append('9')" id="n9" class="btn">9</div>
+      <div @click="addtoLog('+')" id="plus" class="btn operator operator-plus">+</div>
+      <div @click="append('4')" id="n4" class="btn">4</div>
+      <div @click="append('5')" id="n5" class="btn">5</div>
+      <div @click="append('6')" id="n6" class="btn">6</div>
+      <div @click="append('1')" id="n1" class="btn">1</div>
+      <div @click="append('2')" id="n2" class="btn">2</div>
+      <div @click="append('3')" id="n3" class="btn">3</div>
+      <div @click="equal" id="equal" class="btn operator operator-equal">=</div>
+      <div @click="append('0')" id="n0" class="zero">0</div>
+      <div @click="append('.')" id="dot" class="btn">.</div>
     </div>
   </div>
 </template>
 
 <script>
+//import { db } from "../firebase";
+
 export default {
-  name: "NewSale",
+  name: "NewSales",
   props: {
     msg: String
   },
@@ -109,21 +42,40 @@ export default {
         prixApCom: null,
         date: null,
         modePaiement: []
-      }
+      },
+      salers: ["Flor", "Emma", "Sous les pavés le vintage"],
+      logList: "",
+      current: "",
+      answer: "",
+      operatorClicked: true
     };
   },
   methods: {
-    addSaler(saler) {
-      this.transaction.vendeuse = saler;
-      console.log(this.transaction.vendeuse);
-      $(this).addClass("active");
+    append(number) {
+      if (this.operatorClicked) {
+        this.current = "";
+        this.operatorClicked = false;
+      }
+      this.current = `${this.current}${number}`;
     },
-    sendTransaction() {
-      this.transaction.date = new Date();
-      if (this.transaction.modePaiement === "carte") {
-        this.transaction.prixApCom =
-          this.transaction.prixAvCom -
-          (this.transaction.prixAvCom * 1.49) / 100;
+    addtoLog(operator) {
+      if (this.operatorClicked == false) {
+        this.logList += `${this.current} ${operator} `;
+        this.current = "";
+        this.operatorClicked = true;
+      }
+    },
+    clear() {
+      this.current = "";
+      this.answer = "";
+      this.logList = "";
+      this.operatorClicked = false;
+    },
+    equal() {
+      if (this.operatorClicked == false) {
+        this.answer = eval(this.logList + this.current);
+      } else {
+        this.answer = "WHAT?!!";
       }
     }
   }
@@ -149,5 +101,111 @@ export default {
       border: #c3abcd;
     }
   }
+
+  .form-check-label {
+    font-size: 20px;
+    margin-left: 10px;
+  }
+
+  input[type="radio"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #555555;
+    border-radius: 50%;
+    background-clip: content-box;
+    padding: 3px;
+  }
+
+  input[type="radio"]:checked {
+    background-color: #555555;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .newsale {
+    margin-top: 3rem;
+
+    .form-group {
+      margin-top: 2rem;
+
+      input[type="number"] {
+        width: 75% !important;
+      }
+    }
+  }
+
+  #savesalebtn {
+    margin-top: 2rem;
+  }
+}
+
+.calculator {
+  display: grid;
+  grid-template-rows: repeat(7, minmax(60px, auto));
+  grid-template-columns: repeat(4, 60px);
+  width: fit-content;
+  padding: 35px;
+  font-family: "Poppins";
+  font-weight: 300;
+  font-size: 18px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 3px 80px -30px rgba(13, 81, 134, 1);
+}
+
+.btn,
+.zero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #ffffff;
+  background-color: #1e2022;
+  border: 0.5px solid #191b1d;
+  border-radius: 0px;
+  font-size: 2rem;
+}
+
+.display,
+.answer {
+  grid-column: 1 / 5;
+  display: flex;
+  align-items: center;
+}
+
+.display {
+  color: #a3a3a3;
+  border-bottom: 1px solid #e1e1e1;
+  margin-bottom: 15px;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+.answer {
+  font-weight: 500;
+  color: #146080;
+  font-size: 55px;
+  height: 65px;
+}
+
+.zero {
+  grid-column: 1 / 3;
+}
+
+.operator {
+  background-color: #1939f6;
+  color: #FFFFFF;
+  border: 0.5px solid #142ec5;
+}
+
+.operator-plus {
+  grid-row-start: span 2;
+}
+
+.operator-equal {
+  grid-row-start: span 2;
 }
 </style>

@@ -1,6 +1,5 @@
 <template>
   <div class="login">
-    <Navbar></Navbar>
     <main id="mainContent" class="container-lg">
       <div class="modal-body">
         <ul class="nav nav-fill nav-pills mb-3" id="pills-tab" role="tablist">
@@ -62,9 +61,9 @@
             </div>
             <div class="form-group">
               <!--<button class="btn btn-primary" @click="login">Continuar</button>-->
-              <router-link class="btn btn-primary" to="/admin">
+              <button class="btn btn-primary" @click="login">
                 Se connecter
-              </router-link>
+              </button>
             </div>
           </div>
           <div
@@ -113,12 +112,11 @@
         </div>
       </div>
     </main>
-    <Footer></Footer>
   </div>
 </template>
 
 <script>
-//import { fb, db } from "../firebase";
+import { fb, db } from "../firebase";
 
 export default {
   name: "Login",
@@ -131,14 +129,13 @@ export default {
       email: null,
       password: null
     };
-  }
-  /*,
+  },
   methods: {
     login() {
       fb.auth()
         .signInWithEmailAndPassword(this.email, this.password)
         .then(() => {
-          this.$router.replace("admin/articlelist");
+          this.$router.replace("admin/");
         })
         .catch(function(error) {
           var errorCode = error.code;
@@ -155,7 +152,7 @@ export default {
       fb.auth()
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(user => {
-          db.collection("profiles")
+          db.collection("users")
             .doc(user.user.uid)
             .set({
               name: this.name
@@ -180,7 +177,7 @@ export default {
           console.log(error);
         });
     }
-  }*/
+  }
 };
 </script>
 

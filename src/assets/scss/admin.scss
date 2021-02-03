@@ -48,7 +48,7 @@
   border-top: none;
 }
 .sidebar-wrapper .sidebar-brand {
-  padding: 1rem 1.2rem;
+  padding: 1rem 0.5rem;
   display: flex;
   align-items: center;
   height: 55px;
@@ -139,6 +139,7 @@ strong {
   text-overflow: ellipsis;
   flex-shrink: 1;
   overflow: hidden;
+  text-align: left;
 }
 .default-theme .sidebar-wrapper .sidebar-footer > div:last-child {
   border-right: none;
