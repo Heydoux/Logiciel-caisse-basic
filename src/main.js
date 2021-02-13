@@ -6,10 +6,17 @@ import "popper.js";
 import "bootstrap";
 import "./assets/scss/app.scss";
 import excel from "vue-excel-export";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 // CommonJS
 window.Swal = Swal;
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000
+});
+window.Toast = Toast;
 window.$ = window.jQuery = jQuery;
 
 Vue.use(excel);

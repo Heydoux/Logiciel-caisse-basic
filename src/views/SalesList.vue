@@ -40,7 +40,7 @@
     <div
       class="py-3 px-0 container h-100 justify-content-center align-items-center"
     >
-      <div class="row dateFilter">
+      <div class="row dateFilter p-0 m-0">
         <div class="col-md-12">
           <h3 class="text-left">Quelle période :</h3>
         </div>
@@ -100,6 +100,19 @@
               Ce mois-ci
             </label>
           </div>
+        </div>
+      </div>
+      <div class="row paymentFilter p-0 mx-0 mt-4">
+        <div class="col-md-12">
+          <h3 class="text-left">Moyen de paiement :</h3>
+        </div>
+        <div class="paymentSelect mx-auto my-3">
+          <select name="cars" id="cars" @change="pickUpPayment($event)">
+            <option value="all">Tous</option>
+            <option value="cash">Espèces</option>
+            <option value="carte">SumUp</option>
+            <option value="vel">Vente en ligne</option>
+          </select>
         </div>
       </div>
       <h3 class="mt-5 text-left">Ventes {{ this.selectedDate }}</h3>
@@ -224,7 +237,11 @@ export default {
         "Novembre",
         "Décembre"
       ],
-      salers: ["Tous", "Flor", "Emma", "Sous les pavés le vintage"],
+      requestPayment: null,
+      requestSaler: null,
+      requestStartDate: null,
+      requestEndDate: null,
+      salers: ["All", "Flor", "Emma", "Sous les pavés le vintage"],
       transaction: {
         vendeuse: null,
         prixAvCom: null,
@@ -235,48 +252,99 @@ export default {
     };
   },
   methods: {
+    filterRequest() {
+      this.total = this.totalApCom = this.totalCom = 0;
+      this.transactions = [];
+      if (this.requestPayment) {
+        if (this.requestSaler) {
+          db.collection("transactions")
+            .where("vendeuse", "==", this.requestSaler)
+            .where("modePaiement", "==", this.requestPayment)
+            .orderBy("date")
+            .startAt(this.requestStartDate)
+            .endAt(this.requestEndDate)
+            .get()
+            .then(querySnapshot => {
+              querySnapshot.forEach(doc => {
+                this.transactions.push(doc);
+                this.total += doc.data().prixAvCom;
+                this.totalApCom += Number(doc.data().prixApCom.toFixed(2));
+                this.totalApCom = Number(this.totalApCom.toFixed(2));
+                this.totalCom = this.total - this.totalApCom;
+                this.totalCom = Number(this.totalCom.toFixed(2));
+              });
+            });
+        } else {
+          db.collection("transactions")
+            .where("modePaiement", "==", this.requestPayment)
+            .orderBy("date")
+            .startAt(this.requestStartDate)
+            .endAt(this.requestEndDate)
+            .get()
+            .then(querySnapshot => {
+              querySnapshot.forEach(doc => {
+                this.transactions.push(doc);
+                this.total += doc.data().prixAvCom;
+                this.totalApCom += Number(doc.data().prixApCom.toFixed(2));
+                this.totalApCom = Number(this.totalApCom.toFixed(2));
+                this.totalCom = this.total - this.totalApCom;
+                this.totalCom = Number(this.totalCom.toFixed(2));
+              });
+            });
+        }
+      } else if (this.requestSaler) {
+        db.collection("transactions")
+          .where("vendeuse", "==", this.requestSaler)
+          .orderBy("date")
+          .startAt(this.requestStartDate)
+          .endAt(this.requestEndDate)
+          .get()
+          .then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+              this.transactions.push(doc);
+              this.total += doc.data().prixAvCom;
+              this.totalApCom += Number(doc.data().prixApCom.toFixed(2));
+              this.totalApCom = Number(this.totalApCom.toFixed(2));
+              this.totalCom = this.total - this.totalApCom;
+              this.totalCom = Number(this.totalCom.toFixed(2));
+            });
+          });
+      } else {
+        db.collection("transactions")
+          .orderBy("date")
+          .startAt(this.requestStartDate)
+          .endAt(this.requestEndDate)
+          .get()
+          .then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+              this.transactions.push(doc);
+              this.total += doc.data().prixAvCom;
+              this.totalApCom += Number(doc.data().prixApCom.toFixed(2));
+              this.totalApCom = Number(this.totalApCom.toFixed(2));
+              this.totalCom = this.total - this.totalApCom;
+              this.totalCom = Number(this.totalCom.toFixed(2));
+            });
+          });
+      }
+    },
+    pickUpPayment(event) {
+      if (event.target.value != "all") {
+        this.requestPayment = event.target.value;
+      } else {
+        this.requestPayment = null;
+      }
+      this.filterRequest();
+    },
     chooseSaler(salerNumber) {
       $(".btn-saler").removeClass("active");
       var activeSaler = $(".btn-saler")[salerNumber];
       $(activeSaler).addClass("active");
-      var filter = this.salers[salerNumber].toUpperCase();
-      var tr = $("#salesTable tr");
-      this.total = this.totalApCom = this.totalCom = 0;
-      for (var i = 0; i < tr.length; i++) {
-        var td = tr[i].getElementsByTagName("td")[0];
-        if (td) {
-          var textValue = td.textContent || td.innerText;
-          if (salerNumber === 0) {
-            tr[i].style.display = "";
-            let fullprice = parseFloat(
-              tr[i].getElementsByTagName("td")[2].textContent
-            );
-            let priceCom = parseFloat(
-              tr[i].getElementsByTagName("td")[3].textContent
-            );
-            this.total += fullprice;
-            this.totalApCom += priceCom;
-            this.totalApCom = Number(this.totalApCom.toFixed(2));
-            this.totalCom = this.total - this.totalApCom;
-            this.totalCom = Number(this.totalCom.toFixed(2));
-          } else if (textValue.toUpperCase().indexOf(filter) > -1) {
-            tr[i].style.display = "";
-            let fullprice = parseFloat(
-              tr[i].getElementsByTagName("td")[2].textContent
-            );
-            let priceCom = parseFloat(
-              tr[i].getElementsByTagName("td")[3].textContent
-            );
-            this.total += fullprice;
-            this.totalApCom += priceCom;
-            this.totalApCom = Number(this.totalApCom.toFixed(2));
-            this.totalCom = this.total - this.totalApCom;
-            this.totalCom = Number(this.totalCom.toFixed(2));
-          } else {
-            tr[i].style.display = "none";
-          }
-        }
+      if (this.salers[salerNumber] == "All") {
+        this.requestSaler = null;
+      } else {
+        this.requestSaler = this.salers[salerNumber];
       }
+      this.filterRequest();
     },
     onChange(event) {
       var optionText = event.target.value;
@@ -318,22 +386,9 @@ export default {
           enddate.setSeconds(59);
           break;
       }
-      this.transactions = [];
-      db.collection("transactions")
-        .orderBy("date")
-        .startAt(startdate)
-        .endAt(enddate)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            this.transactions.push(doc);
-            this.total += doc.data().prixAvCom;
-            this.totalApCom += Number(doc.data().prixApCom.toFixed(2));
-            this.totalApCom = Number(this.totalApCom.toFixed(2));
-            this.totalCom = this.total - this.totalApCom;
-            this.totalCom = Number(this.totalCom.toFixed(2));
-          });
-        });
+      this.requestStartDate = startdate;
+      this.requestEndDate = enddate;
+      this.filterRequest();
     }
   },
   created() {
@@ -352,26 +407,12 @@ export default {
     enddate.setHours(23);
     enddate.setMinutes(59);
     enddate.setSeconds(59);
-    this.transactions = [];
-    db.collection("transactions")
-      .orderBy("date")
-      .startAt(startdate)
-      .endAt(enddate)
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          this.transactions.push(doc);
-          this.total += doc.data().prixAvCom;
-          this.totalApCom += Number(doc.data().prixApCom);
-          this.totalApCom = Number(this.totalApCom.toFixed(2));
-          this.totalCom = this.total - this.totalApCom;
-          this.totalCom = Number(this.totalCom.toFixed(2));
-        });
-      });
+    this.requestStartDate = startdate;
+    this.requestEndDate = enddate;
+    this.filterRequest();
   },
   watch: {
     pickupDate: function() {
-      //this.resetCheckbox();
       this.total = this.totalApCom = this.totalCom = 0;
       var startdate = new Date(this.pickupDate);
       var enddate = new Date(this.pickupDate);
@@ -387,22 +428,9 @@ export default {
       enddate.setHours(23);
       enddate.setMinutes(59);
       enddate.setSeconds(59);
-      this.transactions = [];
-      db.collection("transactions")
-        .orderBy("date")
-        .startAt(startdate)
-        .endAt(enddate)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            this.transactions.push(doc);
-            this.total += doc.data().prixAvCom;
-            this.totalApCom += Number(doc.data().prixApCom.toFixed(2));
-            this.totalApCom = Number(this.totalApCom.toFixed(2));
-            this.totalCom = this.total - this.totalApCom;
-            this.totalCom = Number(this.totalCom.toFixed(2));
-          });
-        });
+      this.requestStartDate = startdate;
+      this.requestEndDate = enddate;
+      this.filterRequest();
     }
   }
 };

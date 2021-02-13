@@ -1,5 +1,5 @@
 <template>
-  <div class="newsale">
+  <div class="newsales">
     <div class="row justify-content-center align-items-center h-75 w-100 p-0">
       <div class="col-md-4">
         <button
@@ -84,7 +84,7 @@
         </div>
       </div>
       <div class="offset-md-3 col-md-4 m-auto">
-        <button
+      <button
           id="savesalebtn"
           @click="sendTransaction"
           class="btn btn-slpv-primary text-uppercase"
@@ -111,7 +111,7 @@ export default {
         prixAvCom: null,
         prixApCom: null,
         date: null,
-        modePaiement: []
+        modePaiement: null
       },
       salers: ["Flor", "Emma", "Sous les pavés le vintage"]
     };
@@ -125,7 +125,7 @@ export default {
     },
     sendTransaction() {
       this.transaction.date = new Date();
-      this.transaction.prixAvCom = parseInt(this.transaction.prixAvCom);
+      this.transaction.prixAvCom = parseFloat(this.transaction.prixAvCom);
       if (this.transaction.modePaiement === "carte") {
         this.transaction.prixApCom =
           this.transaction.prixAvCom -
@@ -133,27 +133,38 @@ export default {
       } else {
         this.transaction.prixApCom = this.transaction.prixAvCom;
       }
-      db.collection("transactions")
-        .add(this.transaction)
-        .then(docRef => {
-          console.log("Document written with ID: ", docRef.id);
-          this.reset();
-          Swal.fire({
-            title: "Youhou !",
-            text: "Transaction bien enregistrée, bien joué.",
-            icon: "success",
-            confirmButtonText: "Cool"
-          });
-        })
-        .catch(function(error) {
-          console.error("Error adding document in database: ", error);
-          Swal.fire({
-            title: "Oups !",
-            text: "La transacion n'a pas pu s'enregistrer correctement, merci de réessayer",
-            icon: "error",
-            confirmButtonText: "Ok"
-          });
+      if (this.transaction.modePaiement === null || this.transaction.vendeuse === null || ) {
+        Swal.fire({
+          title: "Informations incomplètes !",
+          text:
+            "Un blame pour avoir oublié de sélectionné le mode de paiement ou le compte réalisant la vente !",
+          icon: "error",
+          confirmButtonText: "Ok"
         });
+      } else {
+        db.collection("transactions")
+          .add(this.transaction)
+          .then(docRef => {
+            console.log("Document written with ID: ", docRef.id);
+            this.reset();
+            Swal.fire({
+              title: "Youhou !",
+              text: "Transaction bien enregistrée, bien joué.",
+              icon: "success",
+              confirmButtonText: "Cool"
+            });
+          })
+          .catch(function(error) {
+            console.error("Error adding document in database: ", error);
+            Swal.fire({
+              title: "Oups !",
+              text:
+                "La transacion n'a pas pu s'enregistrer correctement, merci de réessayer",
+              icon: "error",
+              confirmButtonText: "Ok"
+            });
+          });
+      }
     },
     reset() {
       Object.assign(this.$data, this.$options.data.apply(this));
@@ -165,7 +176,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.newsale {
+.newsales {
   height: 100vh;
 
   input[type="number"] {
@@ -203,7 +214,7 @@ export default {
   }
 }
 @media only screen and (max-width: 768px) {
-  .newsale {
+  .newsales {
     margin-top: 3rem;
 
     .form-group {

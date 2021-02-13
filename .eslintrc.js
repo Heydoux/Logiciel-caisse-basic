@@ -14,6 +14,7 @@ module.exports = {
   globals: {
     "$": true,
     "jQuery": true,
-    "Swal": true
+    "Swal": true,
+    "Toast": true
   }
 };

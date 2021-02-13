@@ -83,7 +83,7 @@
       </div>
     </nav>
     <!-- page-content  -->
-    <main class="page-content py-0 h-100">
+    <main class="page-content py-0">
       <router-view />
     </main>
     <!-- page-content" -->
@@ -108,7 +108,9 @@ export default {
       $(".page-wrapper").toggleClass("toggled");
       var routeDest = "/admin/" + dest;
       this.$router.push(routeDest).catch(err => {
-        console.error(err);
+        if (err.name != "NavigationDuplicated") {
+          console.error(err);
+        }
       });
     },
     logout() {
@@ -141,9 +143,10 @@ export default {
     background-color: #26734f;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
-    position: absolute;
+    position: fixed;
     left: 0px;
     top: 0;
+    z-index: 10;
   }
 
   #close-sidebar {

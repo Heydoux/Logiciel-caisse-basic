@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Admin from "../views/Admin.vue";
 import Login from "../views/Login.vue";
-import NewSale from "../views/NewSales.vue";
+import NewSale from "../views/NewSale.vue";
 import SalesList from "../views/SalesList.vue";
 import ExportsExcel from "../views/ExportsExcel.vue";
 import Users from "../views/Users.vue";
