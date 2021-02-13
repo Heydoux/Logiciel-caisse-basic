@@ -178,7 +178,7 @@
 </template>
 
 <script>
-import { db } from "../firebase";
+//import { db } from "../firebase";
 
 export default {
   name: "NewSales",
@@ -275,17 +275,20 @@ export default {
       }
       if (
         this.transaction.modePaiement === null ||
-        this.transaction.vendeuse === null
+        this.transaction.vendeuse === null ||
+        this.transaction.prixAvCom == 0
       ) {
+        console.log("Faux");
         Swal.fire({
           title: "Informations incomplètes !",
           text:
-            "Un blame pour avoir oublié de sélectionné le mode de paiement ou le compte réalisant la vente !",
+            "Un blame pour avoir oublié de sélectionner le mode de paiement ou le compte réalisant la vente !",
           icon: "error",
           confirmButtonText: "Ok"
         });
       } else {
-        db.collection("transactions")
+        console.log("Ok");
+        /*db.collection("transactions")
           .add(this.transaction)
           .then(docRef => {
             console.log("Document written with ID: ", docRef.id);
@@ -307,6 +310,7 @@ export default {
               confirmButtonText: "Ok"
             });
           });
+          */
       }
     },
     reset() {
