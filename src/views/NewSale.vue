@@ -173,12 +173,13 @@
           </div>
         </div>
       </div>
+      
     </div>
   </div>
 </template>
 
 <script>
-//import { db } from "../firebase";
+import { db } from "../firebase";
 
 export default {
   name: "NewSales",
@@ -278,7 +279,6 @@ export default {
         this.transaction.vendeuse === null ||
         this.transaction.prixAvCom == 0
       ) {
-        console.log("Faux");
         Swal.fire({
           title: "Informations incomplètes !",
           text:
@@ -287,8 +287,7 @@ export default {
           confirmButtonText: "Ok"
         });
       } else {
-        console.log("Ok");
-        /*db.collection("transactions")
+        db.collection("transactions")
           .add(this.transaction)
           .then(docRef => {
             console.log("Document written with ID: ", docRef.id);
@@ -310,7 +309,6 @@ export default {
               confirmButtonText: "Ok"
             });
           });
-          */
       }
     },
     reset() {

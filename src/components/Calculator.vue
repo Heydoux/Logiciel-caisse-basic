@@ -62,19 +62,6 @@ export default {
       this.logList = "";
       this.operatorClicked = false;
     },
-    sign() {
-      if (this.current != "") {
-        this.current =
-          this.current.charAt(0) === "-"
-            ? this.current.slice(1)
-            : `-${this.current}`;
-      }
-    },
-    percent() {
-      if (this.current != "") {
-        this.current = `${parseFloat(this.current) / 100}`;
-      }
-    },
     dot() {
       if (this.current.indexOf(".") === -1) {
         this.append(".");

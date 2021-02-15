@@ -16,7 +16,7 @@
               Se connecter
             </a>
           </li>
-          <li class="nav-item">
+          <!--<li class="nav-item">
             <a
               class="nav-link"
               id="pills-register-tab"
@@ -28,7 +28,7 @@
             >
               Créer un compte
             </a>
-          </li>
+          </li>-->
         </ul>
         <div class="tab-content" id="pills-tabContent">
           <div
@@ -66,6 +66,7 @@
               </button>
             </div>
           </div>
+          <!--
           <div
             class="tab-pane fade"
             id="pills-register"
@@ -108,7 +109,7 @@
                 Continuar
               </button>
             </div>
-          </div>
+          </div>-->
         </div>
       </div>
     </main>
