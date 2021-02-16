@@ -84,6 +84,20 @@
               Cette semaine
             </label>
           </div>
+          <div class="form-check">
+            <input
+              type="radio"
+              name="datechoose"
+              class="form-check-input"
+              id="checkbox_pastweek"
+              value="pastweek"
+              v-model="pastWeek"
+              @change="onChange($event)"
+            />
+            <label class="form-check-label" for="checkbox_pastweek">
+              Semaine dernière
+            </label>
+          </div>
         </div>
         <div class="col-md-3">
           <div class="form-check">
@@ -218,6 +232,7 @@ export default {
       selectedDate: "",
       pickupDate: null,
       currentWeek: null,
+      pastWeek: null,
       currentMonth: null,
       currentDay: null,
       total: 0,
@@ -369,6 +384,13 @@ export default {
           startdate = new Date(curr.setDate(first));
           enddate = new Date(curr.setDate(end));
           break;
+        case "pastweek":
+          this.selectedDate = "de la semaine dernière";
+          first = curr.getDate() - curr.getDay() - 6;
+          end = curr.getDate() - curr.getDay();
+          startdate = new Date(curr.setDate(first));
+          enddate = new Date(curr.setDate(end));
+          break;
         case "today":
           this.selectedDate =
             "du " +
@@ -420,7 +442,7 @@ export default {
         "du " +
         this.pickupDate.substring(8, 10) +
         " " +
-        this.months[parseInt(this.pickupDate.substring(5, 7))] +
+        this.months[parseInt(this.pickupDate.substring(5, 7)) - 1] +
         " " +
         this.pickupDate.substring(0, 4);
       startdate.setHours(0);
