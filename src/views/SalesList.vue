@@ -385,6 +385,12 @@ export default {
           startdate = new Date(curr.setDate(first));
           curr = new Date();
           enddate = new Date(curr.setDate(end));
+          startdate.setHours(0);
+          startdate.setMinutes(0);
+          startdate.setSeconds(1);
+          enddate.setHours(23);
+          enddate.setMinutes(59);
+          enddate.setSeconds(59);
           break;
         case "pastweek":
           this.selectedDate = "de la semaine dernière";
@@ -393,6 +399,12 @@ export default {
           startdate = new Date(curr.setDate(first - 7));
           curr = new Date();
           enddate = new Date(curr.setDate(end));
+          startdate.setHours(0);
+          startdate.setMinutes(0);
+          startdate.setSeconds(1);
+          enddate.setHours(23);
+          enddate.setMinutes(59);
+          enddate.setSeconds(59);
           break;
         case "today":
           this.selectedDate =
@@ -406,6 +418,7 @@ export default {
           enddate = new Date(this.currentDate);
           startdate.setHours(0);
           startdate.setMinutes(0);
+          startdate.setSeconds(1);
           enddate.setHours(23);
           enddate.setMinutes(59);
           enddate.setSeconds(59);
