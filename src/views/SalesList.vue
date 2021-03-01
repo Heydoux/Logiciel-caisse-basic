@@ -375,6 +375,7 @@ export default {
             0
           ).getDate();
           startdate = new Date(curr.setDate(1));
+          curr = new Date();
           enddate = new Date(curr.setDate(nbDays));
           break;
         case "week":
@@ -382,13 +383,15 @@ export default {
           first = curr.getDate() - curr.getDay() + 1;
           end = curr.getDate() - curr.getDay() + 7;
           startdate = new Date(curr.setDate(first));
+          curr = new Date();
           enddate = new Date(curr.setDate(end));
           break;
         case "pastweek":
           this.selectedDate = "de la semaine dernière";
-          first = curr.getDate() - curr.getDay() - 6;
+          first = curr.getDate() - curr.getDay() + 1;
           end = curr.getDate() - curr.getDay();
-          startdate = new Date(curr.setDate(first));
+          startdate = new Date(curr.setDate(first - 7));
+          curr = new Date();
           enddate = new Date(curr.setDate(end));
           break;
         case "today":
