@@ -97,6 +97,8 @@ export default {
         currDate.getMonth() + 1,
         0
       ).getDate();
+      currDate.setMonth(this.months.indexOf(this.monthToExport));
+      this.exportName = this.monthToExport + "-" + this.yearToExport;
       var startdate = new Date(currDate.setDate(1));
       var enddate = new Date(currDate.setDate(nbDays));
       db.collection("transactions")
