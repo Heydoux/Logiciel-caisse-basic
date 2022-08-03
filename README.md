@@ -1,4 +1,4 @@
-# Caisse enregistreuse (Essai pour Sous les pavés le vintage)
+# Caisse enregistreuse basique
 
 ### Compiles and hot-reloads for development
 
